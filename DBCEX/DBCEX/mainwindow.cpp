@@ -11,8 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setFixedSize(this->width(), this->height());
-    ui->csvPath->setText(tr("/Users/sunjianhua/Desktop/test.csv"));
-    ui->outPath->setText(tr("/Users/sunjianhua/Desktop/test.dbcxx"));
     //
     _pGBK = QTextCodec::codecForName("gb18030");// 语言设置为简体中文的excel，默认的csv编码为gbk？？？
     _pUTF8 = QTextCodec::codecForName("utf8");
@@ -184,19 +182,25 @@ void MainWindow::on_saveFile_clicked()
     }
 
     // 输出文字
-    //textOffset = ftell(pFile);
-
     if(outTextSize > 0)
         fwrite(pTextM, cLen, outTextSize, pFile);
 
-    // 设置实际文字位置信息
+    // 设置实际文字尺寸信息
     fseek(pFile, textInfoPos, SEEK_SET);
-//    fwrite(&textOffset, cLen, uIntLen, pFile);
     fwrite(&outTextSize, cLen, uIntLen, pFile);
+
     // 清理
     free(pTextM);
     delete []colType;
     fclose(pFile);
+
+    //
+    QMessageBox::warning(this, tr("提示信息"), tr("转换完成"), tr("确  定"));
+
+    // 激活按钮
+    ui->closeWindow->setEnabled(true);
+    ui->saveFile->setText("转换CSV到DBCXX");
+    ui->saveFile->setEnabled(true);
 }
 
 void MainWindow::on_closeWindow_clicked()
@@ -215,6 +219,12 @@ struct TestX
 
 void MainWindow::on_selCSV_clicked()
 {
+    QString filename = QFileDialog::getOpenFileName(this, tr("打开CSV文件"), "", tr("*.csv"));
+    if(!filename.isEmpty())
+        ui->csvPath->setText(filename);
+
+    return;
+
     QString outPath = ui->outPath->toPlainText();
     if(outPath.isEmpty())
     {
@@ -294,9 +304,6 @@ void MainWindow::on_selCSV_clicked()
     delete []textInfo;
     delete []colType;
     fclose(pFile);
-//    QString filename = QFileDialog::getOpenFileName(this, tr("打开CSV文件"), "", tr("*.csv"));
-//    if(!filename.isEmpty())
-//        ui->csvPath->setText(filename);
 }
 
 void MainWindow::on_selPath_clicked()

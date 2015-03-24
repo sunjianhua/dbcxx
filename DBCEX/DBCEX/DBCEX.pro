@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    dbcxx.cpp
 
 HEADERS  += mainwindow.h \
-    strtk.hpp
+    strtk.hpp \
+    dbcxx.h
 
 FORMS    += mainwindow.ui
