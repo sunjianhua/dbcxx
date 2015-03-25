@@ -5,6 +5,8 @@
 #include "strtk.hpp"
 #include "qtextcodec.h"
 
+#include "test.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -124,7 +126,7 @@ void MainWindow::on_saveFile_clicked()
         fwrite(&cc, cLen, cLen, pFile);
     }
 
-    // 跳过第三行，处理所有数据
+    // 跳过前三行，处理所有数据
     for(int curRow = 3; curRow < rowNum; curRow++)
     {
         row = grid.row(curRow);
@@ -208,102 +210,11 @@ void MainWindow::on_closeWindow_clicked()
     this->close();
 }
 
-struct TestX
-{
-    int pText;
-    int i;
-    unsigned int u;
-    float f;
-    int pText1;
-};
-
 void MainWindow::on_selCSV_clicked()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("打开CSV文件"), "", tr("*.csv"));
     if(!filename.isEmpty())
         ui->csvPath->setText(filename);
-
-    return;
-
-    QString outPath = ui->outPath->toPlainText();
-    if(outPath.isEmpty())
-    {
-        QMessageBox::warning(this, tr("提示信息"), tr("阿斯顿发送到发生发顺丰"), tr("确  定"));
-        return;
-    }
-
-    // 打开文件
-    FILE *pFile = fopen(outPath.toStdString().c_str(), "rb");
-    if(NULL == pFile)
-    {
-        QMessageBox::warning(this, tr("提示信息"), tr("异常，打开输出文件失败！！！"), tr("确  定"));
-        return;
-    }
-
-    //
-    void* ptr;
-    int ptrLen = sizeof(void*);
-    char cc;
-    int cLen = sizeof(char);
-    unsigned int uInt;
-    int uIntLen = sizeof(unsigned int);
-    int ii;
-    int iLen = sizeof(int);
-    int ff;
-    int fLen = sizeof(float);
-
-    // 读头
-    char head[6] = ""; // dbcxx";
-    char ver[3] = ""; // 1.0";
-    fread(head, cLen, 5, pFile);
-    fread(ver, cLen, 3, pFile);
-    if(0 != strcmp(head, "dbcxx") || 0 != strcmp(ver, "1.0"))
-    {
-        QMessageBox::warning(this, tr("提示信息"), tr("异常，错误的dbcxx类型"), tr("确  定"));
-        on_closeWindow_clicked();
-    }
-    int rowNum = 0;
-    int colNum = 0;
-    unsigned int textSize = 0;
-    fread(&rowNum, cLen, iLen, pFile);
-    fread(&colNum, cLen, iLen, pFile);
-    fread(&textSize, cLen, uIntLen, pFile);
-
-    char *colType = new char[colNum + 1];
-    memset(colType, 0, colNum + 1);
-    fread(colType, cLen, colNum, pFile);
-    // 判断格式是否相同
-    ;//
-    // 读数据
-    TestX *testX = new TestX[rowNum];
-    int www = sizeof(TestX);
-    int ttt = ptrLen + ptrLen + uIntLen + fLen + iLen;
-    fread(testX, cLen, sizeof(TestX) * rowNum, pFile);
-    // 读文本
-    unsigned int tOffset = ftell(pFile);
-    fseek(pFile, 0, SEEK_END);
-    unsigned int tSize = ftell(pFile);
-    tSize -= tOffset;
-    fseek(pFile, tOffset, SEEK_SET);
-    if(tSize != textSize)
-    {
-        QMessageBox::warning(this, tr("提示信息"), tr("异常，文件损坏"), tr("确  定"));
-        on_closeWindow_clicked();
-    }
-
-    char* textInfo = new char[textSize];
-    fread(textInfo, cLen, textSize, pFile);
-
-    QByteArray ba(textInfo + testX[19].pText1);
-
-    QString xxx(ba);// = _pUTF8->toUnicode(textInfo);
-    QMessageBox::warning(this, tr("提示信息"), xxx, tr("确  定"));
-
-    // 清理
-    delete []testX;
-    delete []textInfo;
-    delete []colType;
-    fclose(pFile);
 }
 
 void MainWindow::on_selPath_clicked()

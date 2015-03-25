@@ -14,10 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    dbcxx.cpp
+    test.cpp
 
 HEADERS  += mainwindow.h \
     strtk.hpp \
-    dbcxx.h
+    dbcxx.h \
+    test.h
 
 FORMS    += mainwindow.ui
