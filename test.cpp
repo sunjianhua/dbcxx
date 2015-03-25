@@ -5,6 +5,7 @@
  *  在mac的64位操作系统，int、unsigned int、float的长度为4，和32位操作系统下相同，手机平台没测试过
  */
 #include "test.h"
+#include "cocos2d.h"
 
 // 注意，出现字符指针的地方，都用unsigned int替代，原因见最上注释
 struct Spell
@@ -41,7 +42,11 @@ bool loader_stub(const char* filename, const char* format, T& l)
 
 bool LoadDBCs()
 {
-    LOAD_DBC("/Users/sunjianhua/Desktop/spell.dbcxx", SpellFormat, dbcxxSpell);
+    std::string fullpath = cocos2d::FileUtils::getInstance()->fullPathForFilename("spell.dbcxx");
+    
+    LOAD_DBC(fullpath.c_str(), SpellFormat, dbcxxSpell);
+    
+    const char* pStringData = dbcxxSpell.getStringData();
 
     for(int i = 0; i < dbcxxSpell.getNumRows(); i++)
     {
@@ -51,6 +56,8 @@ bool LoadDBCs()
             ;// 错误处理
             return false;
         }
+        
+        cocos2d::log("ID: %i, NAME: %s, LEVEL: %i, DAMAGE: %f, IMAGE: %s, TYPE: %i", pSpell->id, pStringData + pSpell->name, pSpell->level, pSpell->damage, pStringData + pSpell->image, pSpell->type);
     }
 
     return true;
