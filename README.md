@@ -88,7 +88,7 @@ dbcxx格式和dbc格式没有什么本质区别，是个人仿照dbc格式处理
 ####test.cpp
 如果对怎样使用不太清楚，可以参考[test.cpp](https://github.com/sunjianhua/dbcxx/blob/master/test.cpp)，这个文件，演示怎样声明满足dbcxx格式的数据结构、怎么加载dbcxx文件，怎么访问加载后数据对象里的每个数据（可以特意看下怎么访问字符串）。
 
-因为[dbcxx.h（点击浏览）](https://github.com/sunjianhua/dbcxx/blob/master/dbcxx.h)是所有c++项目都可以用到的，但是[test.cpp](https://github.com/sunjianhua/dbcxx/blob/master/test.cpp)，因为输出信息的关系，用到了cocos2d-x的信息输出功能，所以这个文件只能用到cocos2d-x项目。
+[dbcxx.h（点击浏览）](https://github.com/sunjianhua/dbcxx/blob/master/dbcxx.h)是所有c++项目都可以用到的，但是[test.cpp](https://github.com/sunjianhua/dbcxx/blob/master/test.cpp)，因为输出信息的关系，用到了cocos2d-x的信息输出功能，所以这个文件只能用到cocos2d-x项目。
 
 ####spell.csv
 如为了测试这个功能，手边没有CSV文件，可以下载[spell.csv](https://github.com/sunjianhua/dbcxx/blob/master/spell.csv)
